@@ -36,7 +36,7 @@ import java.util.Map;
 
 /**
  * An extension of {@code android.support.v4.app.FragmentStatePagerAdapter} to allow straight forward
- * locating of contained {@code Fragment} by position, through getFragment(position)
+ * locating of paged {@code Fragment} by position, via getFragment(position)
  *
  * This does not force instantiation of new {@code Fragment}s; instead, only returns it if one has already
  * been created through normal {@code PageAdapter} lifecycle.
