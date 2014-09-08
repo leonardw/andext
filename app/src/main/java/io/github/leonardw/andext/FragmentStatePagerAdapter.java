@@ -35,17 +35,19 @@ import java.util.Map;
  */
 public abstract class FragmentStatePagerAdapter extends android.support.v4.app.FragmentStatePagerAdapter {
 	/**
-	 * Max number of {Fragment}s to hold in cache before a sweep is triggered.
-	 * This should be larger than 3 since the PageAdapter will typically hold
-	 * up to 3 active Fragments.
-	 * Set this to a higher number to reduce the frequency of housekeeping sweep.
+	 * Default max number of {@code Fragment}s to hold in cache before a sweep is triggered.
 	 */
 	private static final int MAX_FRAGMENT_CACHE_SIZE = 10;
 
 	/**
-	 * The lookup table between position and the corresponding {Fragment}.
-	 * Values are {WeakReference}s to {Fragment}s what have been created previously.
-	 * Typically, only up to 3 entries will hold valid references to active {Fragment}s at
+	 * The entries count threshold, upon which to trigger a dead reference sweep
+	 */
+	private int mFragmentSweepThreshold = MAX_FRAGMENT_CACHE_SIZE;
+
+	/**
+	 * The lookup table between position and the corresponding {@code Fragment}.
+	 * Values are {@code WeakReference}s to {@code Fragment}s what have been created previously.
+	 * Typically, only up to 3 entries will hold valid references to active {@code Fragment}s at
 	 * any one given time.
 	 */
 	private Map<Integer, WeakReference<Fragment>> mFragmentCache = new HashMap<Integer, WeakReference<Fragment>>();
@@ -53,7 +55,7 @@ public abstract class FragmentStatePagerAdapter extends android.support.v4.app.F
 	/**
 	 * Constructor
 	 *
-	 * @param fm The {FragmentManager}
+	 * @param fm The {@code FragmentManager}
 	 */
 	public FragmentStatePagerAdapter(FragmentManager fm) {
 		super(fm);
@@ -73,7 +75,7 @@ public abstract class FragmentStatePagerAdapter extends android.support.v4.app.F
 	 * Get the {@code Fragment} at a given position
 	 *
 	 * @param position Position at which the {@code Fragment} is located
-	 * @return The {Fragment} at the given position. Returns {@code null} if
+	 * @return The {@code Fragment} at the given position. Returns {@code null} if
 	 * a {@code Fragment} does not exist or has already been destroyed through
 	 * lifecycle events
 	 */
@@ -83,11 +85,27 @@ public abstract class FragmentStatePagerAdapter extends android.support.v4.app.F
 	}
 
 	/**
+	 * Set the number of {@code Fragment}s in cache before a sweep for dead references
+	 * is triggered.
+	 *
+	 * This should be larger than 3 since the {@code PageAdapter} will typically hold
+	 * at least 3 active {@code Fragments}. (In observation, up to 5 active Fragments
+	 * are kept.)
+	 *
+	 * Set this to a higher number to reduce the frequency of housekeeping sweep.
+	 *
+	 * @param fragmentSweepThreshold The entries count threshold
+	 */
+	public void setFragmentSweepThreshold(int fragmentSweepThreshold) {
+		this.mFragmentSweepThreshold = fragmentSweepThreshold;
+	}
+
+	/**
 	 * Iterate through all entries in cache and remove any dead {@code WeakReference}s
 	 * to {@code Fragment}s
 	 */
 	private void sweep() {
-		if (mFragmentCache.size() > MAX_FRAGMENT_CACHE_SIZE) {
+		if (mFragmentCache.size() > mFragmentSweepThreshold) {
 			Iterator<Map.Entry<Integer, WeakReference<Fragment>>> it = mFragmentCache.entrySet().iterator();
 			while (it.hasNext()) {
 				Map.Entry<Integer, WeakReference<Fragment>> entry = it.next();
