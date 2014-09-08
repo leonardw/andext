@@ -62,7 +62,7 @@ public abstract class FragmentStatePagerAdapter extends android.support.v4.app.F
 	@Override
 	public Object instantiateItem(ViewGroup container, int position) {
 		final Object item = super.instantiateItem(container, position);
-		if (item instanceof Fragment) {
+		if (item instanceof Fragment && item != getFragment(position)) {
 			mFragmentCache.put(position, new WeakReference<Fragment>((Fragment) item));
 			sweep();
 		}
