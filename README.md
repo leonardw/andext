@@ -18,7 +18,6 @@ Features:
 ## API
 
 #### FragmentStatePagerAdapter
-True if the process is a master. This is a convenience to the underlying Node 'cluster' implementation
 An extension to `android.support.v4.app.FragmentStatePagerAdapter` providing `Fragment getFragment(int position)`
 
 
