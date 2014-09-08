@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-/**
+/*
  * The MIT License (MIT)
  * <p/>
  * Copyright (c) 2014 Leonard Wu <leonard.wu92@alumni.ic.ac.uk>
