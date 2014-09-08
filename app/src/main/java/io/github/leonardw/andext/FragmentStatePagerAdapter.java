@@ -42,7 +42,7 @@ public abstract class FragmentStatePagerAdapter extends android.support.v4.app.F
 	/**
 	 * The entries count threshold, upon which to trigger a dead reference sweep
 	 */
-	private int mFragmentSweepThreshold = MAX_FRAGMENT_CACHE_SIZE;
+	private int mSweepThreshold = MAX_FRAGMENT_CACHE_SIZE;
 
 	/**
 	 * The lookup table between position and the corresponding {@code Fragment}.
@@ -94,10 +94,10 @@ public abstract class FragmentStatePagerAdapter extends android.support.v4.app.F
 	 *
 	 * Set this to a higher number to reduce the frequency of housekeeping sweep.
 	 *
-	 * @param fragmentSweepThreshold The entries count threshold
+	 * @param sweepThreshold The entries count threshold
 	 */
-	public void setFragmentSweepThreshold(int fragmentSweepThreshold) {
-		this.mFragmentSweepThreshold = fragmentSweepThreshold;
+	public void setSweepThreshold(int sweepThreshold) {
+		this.mSweepThreshold = sweepThreshold;
 	}
 
 	/**
@@ -105,7 +105,7 @@ public abstract class FragmentStatePagerAdapter extends android.support.v4.app.F
 	 * to {@code Fragment}s
 	 */
 	private void sweep() {
-		if (mFragmentCache.size() > mFragmentSweepThreshold) {
+		if (mFragmentCache.size() > mSweepThreshold) {
 			Iterator<Map.Entry<Integer, WeakReference<Fragment>>> it = mFragmentCache.entrySet().iterator();
 			while (it.hasNext()) {
 				Map.Entry<Integer, WeakReference<Fragment>> entry = it.next();
