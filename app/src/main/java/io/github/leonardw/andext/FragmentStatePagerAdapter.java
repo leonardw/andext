@@ -33,6 +33,14 @@ import java.util.Map;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
+/**
+ * An extension of {@code android.support.v4.app.FragmentStatePagerAdapter} to allow straight forward
+ * locating of contained {@code Fragment} by position, through getFragment(position)
+ *
+ * This does not force instantiation of new {@code Fragment}s; instead, only returns it if one has already
+ * been created through normal {@code PageAdapter} lifecycle.
+ */
 public abstract class FragmentStatePagerAdapter extends android.support.v4.app.FragmentStatePagerAdapter {
 	/**
 	 * Default max number of {@code Fragment}s to hold in cache before a sweep is triggered.
@@ -73,6 +81,9 @@ public abstract class FragmentStatePagerAdapter extends android.support.v4.app.F
 
 	/**
 	 * Get the {@code Fragment} at a given position
+	 *
+	 * This does not force instantiation of new {@code Fragment}s; instead, only returns it if one has already
+	 * been created through normal {@code PageAdapter} lifecycle.
 	 *
 	 * @param position Position at which the {@code Fragment} is located
 	 * @return The {@code Fragment} at the given position. Returns {@code null} if
