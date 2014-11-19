@@ -37,7 +37,7 @@ import java.util.Map;
 /**
  * An extension of {@code android.support.v4.app.FragmentStatePagerAdapter} to allow straight forward
  * locating of paged {@code Fragment} by position, via getFragment(position)
- *
+ * <p/>
  * This does not force instantiation of new {@code Fragment}s; instead, only returns it if one has already
  * been created through normal {@code PageAdapter} lifecycle.
  */
@@ -91,7 +91,7 @@ public abstract class TrackedFragmentStatePagerAdapter extends android.support.v
 		final Object item = super.instantiateItem(container, position);
 		if (item instanceof Fragment && item != getFragment(position)) {
 			if (item instanceof Pageable) {
-				((Pageable)item).setPageTracker(mPageTracker);
+				((Pageable) item).setPageTracker(mPageTracker);
 			}
 			mFragmentCache.put(position, new WeakReference<Fragment>((Fragment) item));
 			sweep();
@@ -101,7 +101,7 @@ public abstract class TrackedFragmentStatePagerAdapter extends android.support.v
 
 	/**
 	 * Get the {@code Fragment} at a given position
-	 *
+	 * <p/>
 	 * This does not force instantiation of new {@code Fragment}s; instead, only returns it if one has already
 	 * been created through normal {@code PageAdapter} lifecycle.
 	 *
@@ -118,11 +118,11 @@ public abstract class TrackedFragmentStatePagerAdapter extends android.support.v
 	/**
 	 * Set the number of {@code Fragment}s in cache before a sweep for dead references
 	 * is triggered.
-	 *
+	 * <p/>
 	 * This should be larger than 3 since the {@code PageAdapter} will typically hold
 	 * at least 3 active {@code Fragments}. (In observation, up to 5 active Fragments
 	 * are kept.)
-	 *
+	 * <p/>
 	 * Set this to a higher number to reduce the frequency of housekeeping sweep.
 	 *
 	 * @param sweepThreshold The entries count threshold
