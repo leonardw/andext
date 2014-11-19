@@ -48,15 +48,15 @@ public abstract class TrackedFragmentStatePagerAdapter extends android.support.v
 	private static final int MAX_FRAGMENT_CACHE_SIZE = 10;
 
 	/**
-	 * Object of this type can be used to track the currently selected page in a ViewPager
+	 * Object of this type can be used to track the currently selected page in a ViewPager.
 	 */
 	public interface PageTracker {
 		public boolean isCurrentPosition(int position);
 	}
 
 	/**
-	 * Each page object must implement this in order to be automatically assigned a PageTracker
-	 * on creation
+	 * Each page object may implement this in order to be automatically assigned
+	 * a PageTracker on creation
 	 */
 	public interface Pageable {
 		public void setPageTracker(PageTracker pageTracker);
@@ -147,6 +147,12 @@ public abstract class TrackedFragmentStatePagerAdapter extends android.support.v
 		}
 	}
 
+	/**
+	 * Once set, this PageTracker will be assigned to all Pageable fragments that are
+	 * created through this adapter.
+	 *
+	 * @param pageTracker
+	 */
 	public void setPageTracker(PageTracker pageTracker) {
 		this.mPageTracker = pageTracker;
 	}
