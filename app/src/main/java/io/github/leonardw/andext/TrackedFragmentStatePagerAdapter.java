@@ -41,11 +41,28 @@ import java.util.Map;
  * This does not force instantiation of new {@code Fragment}s; instead, only returns it if one has already
  * been created through normal {@code PageAdapter} lifecycle.
  */
-public abstract class FragmentStatePagerAdapter extends android.support.v4.app.FragmentStatePagerAdapter {
+public abstract class TrackedFragmentStatePagerAdapter extends android.support.v4.app.FragmentStatePagerAdapter {
 	/**
 	 * Default max number of {@code Fragment}s to hold in cache before a sweep is triggered.
 	 */
 	private static final int MAX_FRAGMENT_CACHE_SIZE = 10;
+
+	/**
+	 * Object of this type can be used to track the currently selected page in a ViewPager
+	 */
+	public interface PageTracker {
+		public boolean isCurrentPosition(int position);
+	}
+
+	/**
+	 * Each page object must implement this in order to be automatically assigned a PageTracker
+	 * on creation
+	 */
+	public interface Pageable {
+		public void setPageTracker(PageTracker pageTracker);
+	}
+
+	PageTracker mPageTracker;
 
 	/**
 	 * The entries count threshold, upon which to trigger a dead reference sweep
@@ -65,7 +82,7 @@ public abstract class FragmentStatePagerAdapter extends android.support.v4.app.F
 	 *
 	 * @param fm The {@code FragmentManager}
 	 */
-	public FragmentStatePagerAdapter(FragmentManager fm) {
+	public TrackedFragmentStatePagerAdapter(FragmentManager fm) {
 		super(fm);
 	}
 
@@ -73,6 +90,9 @@ public abstract class FragmentStatePagerAdapter extends android.support.v4.app.F
 	public Object instantiateItem(ViewGroup container, int position) {
 		final Object item = super.instantiateItem(container, position);
 		if (item instanceof Fragment && item != getFragment(position)) {
+			if (item instanceof Pageable) {
+				((Pageable)item).setPageTracker(mPageTracker);
+			}
 			mFragmentCache.put(position, new WeakReference<Fragment>((Fragment) item));
 			sweep();
 		}
@@ -125,5 +145,9 @@ public abstract class FragmentStatePagerAdapter extends android.support.v4.app.F
 				}
 			}
 		}
+	}
+
+	public void setPageTracker(PageTracker pageTracker) {
+		this.mPageTracker = pageTracker;
 	}
 }
